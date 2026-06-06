@@ -114,3 +114,41 @@ if (downloadBtn) {
         doc.save("Md_Nazir_Ahamed_Resume.pdf");
     });
 }
+
+// Contact Form AJAX Submission
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission (page redirect)
+        
+        const submitBtn = contactForm.querySelector('input[type="submit"]');
+        const originalText = submitBtn.value;
+        submitBtn.value = "Sending...";
+        
+        const formData = new FormData(contactForm);
+
+        fetch("https://formsubmit.co/ajax/imnazirk@gmail.com", {
+            method: "POST",
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Show Success Alert
+            alert("Thank You! Aapka message successfully send ho gaya hai.");
+            // Reset the form fields
+            contactForm.reset();
+            // Redirect to home section
+            window.location.href = "#home";
+            // Restore button text
+            submitBtn.value = originalText;
+        })
+        .catch(error => {
+            alert("Oops! Kuch galat ho gaya. Please phir se try karein.");
+            submitBtn.value = originalText;
+            console.error(error);
+        });
+    });
+}
